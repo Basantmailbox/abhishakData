@@ -1,0 +1,15 @@
+getUrlParameter
+
+$scope.OrderPickLocation.AltMobileNo
+
+DecodeMobile
+
+AltMobileNo
+
+
+293783
+12121212121
+http://localhost:64367/INBOUND_NEW/post_sale.aspx?ca_id=xrNVnQZhh92V4QPe8aJH0g%3d%3d
+
+
+http://localhost:64367/INBOUND_NEW/presale_search.aspx?MobileNo=C3b0RPcFUz4a2%2bzgK0icpTrBSsMa9LKa9MbD2k8r%2b88%3d&Current_Land_Call=C3b0RPcFUz4a2%2bzgK0icpTrBSsMa9LKa9MbD2k8r%2b88%3d
