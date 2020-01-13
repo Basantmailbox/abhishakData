@@ -1,0 +1,58 @@
+ int result = 0;
+        //string hsmid = "diet_whatsapp_new";
+        string hsmid = "package_details_new";
+        string customer_name = "Customer";
+        string ans = "";
+        string mid = "";
+        string statusdesc = "";
+        string statuscode = "";
+        HWellness encr = new HWellness();
+        DBController dbc = new DBController();
+        try
+        {
+            string data1 = "";
+            string URL1 = "https://rcmapi.instaalerts.zone/services/rcm/sendMessage";
+             data1 = @"{ ""message"":{ ""channel"":""WABA"", ""content"":{ ""preview_url"":false, ""type"":""TEMPLATE"", ""template"":{ ""templateId"":""" + hsmid.Trim() + "";
+             data1 = data1 + @""", ""parameterValues"":{ ""0"":""" + customer_name.Trim() + "";
+             data1 = data1 + @"""} } }, ""recipient"":{ ""to"":""91" + MobileNo.Trim() + "";
+             data1 = data1 + @""",""recipient_type"":""individual"", ""reference"":{ ""cust_ref"":""Some Customer Ref"", ""messageTag1"":""Message Tag Val1"", ""conversationId"":"""" } }, ""sender"":{ ""from"":""919810981083"" }, ""preferences"":{ ""webHookDNId"":""HWIN_Waba"" } }, ""metaData"":{ ""version"":""v1.0.9"" }}";
+            //data1 = @"{""message"" : {  ""channel"" : ""WABA"",  ""content"" : { ""preview_url"" : false, ""text"" : ""Thanks for showing your intrest in Hindustan Wellness"", ""type"" : ""TEXT""  },  ""recipient"" : {    ""to"" : ""919555610864"",    ""recipient_type"" : ""individual"",    ""reference"" : {      ""cust_ref"" : ""Some Customer Ref"", ""messageTag1"" : ""Message Tag Val1"", ""conversationId"" : """"    }  },  ""sender"" : {    ""from"" : ""919810981083""  },  ""preferences"" : {    ""webHookDNId"" : ""HWIN_Waba""  }   },   ""metaData"" : {  ""version"" : ""v1.0.9""   } } ";
+
+            HttpWebRequest request1 = (HttpWebRequest)WebRequest.Create(URL1);
+            request1.Headers.Add("Authentication", "Bearer sK0JEjawVtn3GTqhl9xslg==");
+            request1.Method = "POST";
+            request1.ContentType = "application/json";
+            request1.ContentLength = data1.Length;
+            request1.PreAuthenticate = true;
+
+
+            StreamWriter requestWriter1 = new StreamWriter(request1.GetRequestStream(), Encoding.ASCII);
+            requestWriter1.Write(data1);
+            requestWriter1.Close();
+            try
+            {
+                WebResponse response1 = request1.GetResponse();
+                StreamReader reader1 = new StreamReader(response1.GetResponseStream());
+                System.Web.Script.Serialization.JavaScriptSerializer parser1 = new System.Web.Script.Serialization.JavaScriptSerializer();
+                string responseStringData1 = reader1.ReadToEnd();
+                DataTable dt1 = ConvertJSONToDataTable(responseStringData1);
+                if (dt1.Rows[0]["statuscode"].ToString() == "200")
+                {
+                    mid = dt1.Rows[0]["mid"].ToString();
+                    statusdesc = dt1.Rows[0]["statusdesc"].ToString();
+                    statuscode = dt1.Rows[0]["statuscode"].ToString();
+                }
+                else
+                {
+                    mid = dt1.Rows[0]["mid"].ToString();
+                    statusdesc = dt1.Rows[0]["statusdesc"].ToString();
+                    statuscode = dt1.Rows[0]["statuscode"].ToString();
+                }
+            }
+            catch (WebException we)
+            {
+                string webExceptionMessage = we.Message;
+                ans = "0";
+            }
+            result = UpdateAgentSendPackageDetailsOnWA(mid, statusdesc, Convert.ToInt32(statuscode), pkg_ID, MobileNo, hsmid);
+            ans = "1";
